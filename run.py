@@ -12,12 +12,19 @@ parser.add_argument('-c', '--config', type=str, default='./config.json',
                     help='Federated learning configuration file.')
 parser.add_argument('-l', '--log', type=str, default='INFO',
                     help='Log messages level.')
+parser.add_argument('-f', '--filename', type=str, default='',
+                    help='logger filename')
 
 args = parser.parse_args()
 
 # Set logging
-logging.basicConfig(
-    format='[%(levelname)s][%(asctime)s]: %(message)s', level=getattr(logging, args.log.upper()), datefmt='%H:%M:%S')
+if args.filename == '':
+    logging.basicConfig(format='[%(levelname)s][%(asctime)s]: %(message)s', level=getattr(logging, args.log.upper()), datefmt='%H:%M:%S')
+else:
+    logging.basicConfig(
+        format='[%(levelname)s][%(asctime)s]: %(message)s', level=getattr(logging, args.log.upper()),
+        filename=args.filename,
+        datefmt='%H:%M:%S')
 
 
 def main():
