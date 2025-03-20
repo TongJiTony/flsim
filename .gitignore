@@ -108,3 +108,6 @@ data/
 
 # Global model files
 **/global
+
+# nohup.out
+nohup.out

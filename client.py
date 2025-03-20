@@ -2,6 +2,7 @@ import logging
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from dataInjection import data_injection
 
 
 class Client(object):
@@ -48,7 +49,20 @@ class Client(object):
 
         # Extract trainset, testset (if applicable)
         data = self.data
+
+        logging.info('client#{} gets data length: {}'.format(self.client_id,len(data)))
+
+        # Perform data injection
+        # choose client 1 as the malicious client
+        target_client_id = 1
+        percentage = 0.2
+        if self.client_id == target_client_id: 
+            logging.info('Choose client #{} to attack, flipping {} of all labels'.format(self.client_id, percentage))
+            data = data_injection(data, percentage)
+        
+        # Set data to trainset
         if do_test:  # Partition for testset if applicable
+            logging.info('do_test is true')
             self.trainset = data[:int(len(data) * (1 - test_partition))]
             self.testset = data[int(len(data) * (1 - test_partition)):]
         else:

@@ -1,6 +1,6 @@
 {
     "clients": {
-        "total": 100,
+        "total": 10,
         "per_round": 10
     },
     "data": {
@@ -11,7 +11,7 @@
         "IID": true
     },
     "federated_learning": {
-        "rounds": 1000,
+        "rounds": 10,
         "target_accuracy": 0.99,
         "task": "train",
         "epochs": 5,
