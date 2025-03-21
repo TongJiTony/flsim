@@ -110,9 +110,15 @@ def train(model, trainloader, optimizer, epochs):
                     epoch, epochs, loss.item()))
 
 
+from sklearn.metrics import f1_score, recall_score
+import numpy as np
+
 def test(model, testloader):
     model.to(device)
     model.eval()
+
+    all_labels = []
+    all_predictions = []
 
     with torch.no_grad():
         correct = 0
@@ -121,12 +127,26 @@ def test(model, testloader):
             images, labels = data
             images, labels = images.to(device), labels.to(device)
             outputs = model(images)
-            predicted = torch.argmax(  # pylint: disable=no-member
-                outputs, dim=1)
+            predicted = torch.argmax(outputs, dim=1)  # 获取预测结果
+
+            # 收集所有标签和预测结果
+            all_labels.extend(labels.cpu().numpy())
+            all_predictions.extend(predicted.cpu().numpy())
+
+            # 计算准确率
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
+    # 计算准确率
     accuracy = correct / total
     logging.debug('Accuracy: {:.2f}%'.format(100 * accuracy))
 
-    return accuracy
+    # 计算召回率（Recall）
+    recall = recall_score(all_labels, all_predictions, average='weighted')  # 根据类型分配权重
+    logging.debug('Recall: {:.2f}%'.format(100 * recall))
+
+    # 计算 F-score
+    f_score = f1_score(all_labels, all_predictions, average='weighted')  # 根据类型分配权重
+    logging.debug('F-score: {:.2f}%'.format(100 * f_score))
+
+    return accuracy, recall, f_score

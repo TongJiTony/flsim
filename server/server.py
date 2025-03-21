@@ -197,9 +197,12 @@ class Server(object):
             testset = self.loader.get_testset()
             batch_size = self.config.fl.batch_size
             testloader = fl_model.get_testloader(testset, batch_size)
-            accuracy = fl_model.test(self.model, testloader)
+            accuracy, recall, f_score = fl_model.test(self.model, testloader)
 
-        logging.info('Average accuracy: {:.2f}%\n'.format(100 * accuracy))
+        logging.info('Average accuracy: {:.2f}%'.format(100 * accuracy))
+        logging.info('Recall: {:.2f}%'.format(100 * recall))
+        logging.info('F-score: {:.2f}%\n'.format(100 * f_score))
+
         return accuracy
 
     # Federated learning phases

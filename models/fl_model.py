@@ -104,4 +104,7 @@ def test(model, testloader):  # CHECKME
     accuracy = correct / total
     logging.debug('Accuracy: {:.2f}%'.format(100 * accuracy))
 
-    return accuracy
+    recall = 0
+    f_score = 0
+
+    return accuracy, recall, f_score
