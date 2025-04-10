@@ -1,7 +1,8 @@
 {
     "clients": {
-        "total": 3,
-        "per_round": 3
+        "total": 10,
+        "per_round": 5,
+        "injection": false
     },
     "data": {
         "loading": "static",
@@ -11,7 +12,7 @@
         "IID": true
     },
     "federated_learning": {
-        "rounds": 10,
+        "rounds": 1,
         "target_accuracy": 0.99,
         "task": "train",
         "epochs": 5,

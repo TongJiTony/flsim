@@ -43,6 +43,7 @@ class Client(object):
         # Extract from config
         do_test = self.do_test = config.clients.do_test
         test_partition = self.test_partition = config.clients.test_partition
+        injection = self.injection = config.clients.injection
 
         # Download data
         self.data = self.download(data)
@@ -54,11 +55,12 @@ class Client(object):
 
         # Perform data injection
         # choose client 1 as the malicious client
-        target_client_id = 1
-        percentage = 0.2
-        if self.client_id == target_client_id: 
-            logging.info('Choose client #{} to attack, flipping {} of all labels'.format(self.client_id, percentage))
-            data = data_injection(data, percentage)
+        if injection:
+            target_client_id = 1
+            percentage = 0.2
+            if self.client_id == target_client_id: 
+                logging.info('Choose client #{} to attack, flipping {} of all labels'.format(self.client_id, percentage))
+                data = data_injection(data, percentage)
         
         # Set data to trainset
         if do_test:  # Partition for testset if applicable
