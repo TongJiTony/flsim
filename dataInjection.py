@@ -19,6 +19,16 @@ import numpy as np
     # 9	Ankle boot
 
 def label_flip(sample, num_classes=10):
+    """
+    对FashionMNIST数据进行标签翻转
+
+    参数:
+    sample (tuple): (image tensor, label)
+    num_classes (int): 标签类别数量
+
+    返回:
+    tuple: (image tensor, 随机label)
+    """
     data, label = sample
     false_label = label
     while false_label == label:
@@ -46,23 +56,21 @@ def false_sample(sample, mean=0, std=0.1):
     return noisy_data, label
 
 def data_injection(data, percentage, method):
+    injection_option = method
+    option_list = ["label_flip", "false_sample"]
     for i in range(0, int(len(data)*percentage)):
         sample = data[i]
         _, label = sample
 
+        if method == "mixed":
+            injection_option = np.random.choice(option_list)
+
         # label flipping
-        if method == "label_flip":
+        if injection_option == "label_flip":
             data[i] = label_flip(sample)
             logging.info('Pick #{} sample, flipping label {} to label {}'.format(i, label, data[i][1]))
-        elif method == "false_sample":
+        elif injection_option == "false_sample":
             data[i] = false_sample(sample)
             logging.info('Pick #{} sample, creating false sample of label {}'.format(i, label))
-        elif method == "mixed":
-            choice = np.random.randint(0,2)
-            if choice == 0:
-                data[i] = label_flip(sample)
-                logging.info('Pick #{} sample, flipping label {} to label {}'.format(i, label, data[i][1]))
-            else:
-                data[i] = false_sample(sample)
-                logging.info('Pick #{} sample, creating false sample of label {}'.format(i, label))
+            
     return data

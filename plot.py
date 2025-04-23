@@ -2,12 +2,12 @@ import argparse
 import re
 import matplotlib.pyplot as plt
 
-def parse_log(log_file):
+def parse_log(log_file, max_round):
     """ 解析日志文件，提取轮数和准确率 """
     rounds = []
     accuracies = []
 
-    round_pattern = re.compile(r"\*\*\*\* Round (\d+)/30 \*\*\*\*")
+    round_pattern = re.compile(r"\*\*\*\* Round (\d+)/\d+ \*\*\*\*")
     accuracy_pattern = re.compile(r"Average accuracy: (\d+\.\d+)%")
 
     with open(log_file, "r", encoding="utf-8") as f:
@@ -21,14 +21,17 @@ def parse_log(log_file):
             if accuracy_match:
                 accuracies.append(float(accuracy_match.group(1)))
 
+            if len(rounds) >= max_round and len(accuracies) == len(rounds):
+                break
+
     return rounds, accuracies
 
-def plot_accuracy(log_files, output_image):
+def plot_accuracy(log_files, output_image, max_round):
     """ 绘制多个日志文件的对比图 """
     plt.figure(figsize=(20, 10))
 
     for log_file in log_files:
-        rounds, accuracies = parse_log(log_file)
+        rounds, accuracies = parse_log(log_file, max_round)
         label = log_file.split('/')[-1]  # 使用文件名作为标签
         plt.plot(rounds, accuracies, marker='o', linestyle='-', label=label)
 
@@ -49,8 +52,10 @@ if __name__ == "__main__":
                         help='List of log file paths to process.')
     parser.add_argument('-o', '--output', type=str, default='accuracy_comparison.png',
                         help='Output image filename.')
+    parser.add_argument('-n', '--rounds', type=int, default=30,
+                        help= 'Maximun rounds')
 
     args = parser.parse_args()
 
     # 运行绘图函数
-    plot_accuracy(args.files, args.output)
+    plot_accuracy(args.files, args.output, args.rounds)

@@ -44,6 +44,7 @@ class Client(object):
         do_test = self.do_test = config.clients.do_test
         test_partition = self.test_partition = config.clients.test_partition
         injection = self.injection = config.clients.injection
+        injection_method = self.injection_method = config.clients.injection_method
 
         # Download data
         self.data = self.download(data)
@@ -60,7 +61,7 @@ class Client(object):
             percentage = 0.2
             if self.client_id == target_client_id: 
                 logging.info('Choose client #{} to attack, flipping {} of all labels'.format(self.client_id, percentage))
-                data = data_injection(data, percentage, "mixed")
+                data = data_injection(data, percentage, injection_method)
         
         # Set data to trainset
         if do_test:  # Partition for testset if applicable

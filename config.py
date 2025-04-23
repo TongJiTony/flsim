@@ -18,8 +18,8 @@ class Config(object):
 
         # -- Clients --
         fields = ['total', 'per_round', 'label_distribution',
-                  'do_test', 'test_partition', 'injection']
-        defaults = (0, 0, 'uniform', False, None, False)
+                  'do_test', 'test_partition', 'injection','injection_method']
+        defaults = (0, 0, 'uniform', False, None, False, 'mixed')
         params = [config['clients'].get(field, defaults[i])
                   for i, field in enumerate(fields)]
         self.clients = namedtuple('clients', fields)(*params)
