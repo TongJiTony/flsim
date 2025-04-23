@@ -2,7 +2,8 @@
     "clients": {
         "total": 10,
         "per_round": 5,
-        "injection": false
+        "label_distribution": "normal",
+        "injection": true
     },
     "data": {
         "loading": "static",
@@ -12,7 +13,7 @@
         "IID": true
     },
     "federated_learning": {
-        "rounds": 1,
+        "rounds": 30,
         "target_accuracy": 0.99,
         "task": "train",
         "epochs": 5,

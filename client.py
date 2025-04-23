@@ -60,7 +60,7 @@ class Client(object):
             percentage = 0.2
             if self.client_id == target_client_id: 
                 logging.info('Choose client #{} to attack, flipping {} of all labels'.format(self.client_id, percentage))
-                data = data_injection(data, percentage)
+                data = data_injection(data, percentage, "mixed")
         
         # Set data to trainset
         if do_test:  # Partition for testset if applicable
