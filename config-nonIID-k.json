@@ -1,0 +1,33 @@
+{
+    "clients": {
+        "total": 10,
+        "per_round": 5,
+        "label_distribution": "normal",
+        "injection": false,
+        "injection_method": "mixed"
+    },
+    "data": {
+        "loading": "static",
+        "partition": {
+            "size": 1000
+        },
+        "IID": false,
+        "bias": {
+            "primary": 0.5,
+            "secondary": true
+        }
+    },
+    "federated_learning": {
+        "rounds": 30,
+        "target_accuracy": 0.99,
+        "task": "train",
+        "epochs": 5,
+        "batch_size": 10
+    },
+    "model": "FashionMNIST",
+    "paths": {
+        "data": "./data",
+        "model": "./models"
+    },
+    "server": "kcenter"
+}
