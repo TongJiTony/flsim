@@ -41,28 +41,28 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=5, stride=1, padding=2),
+            nn.Conv2d(1, 16, kernel_size=(5, 5), padding=2),
             nn.BatchNorm2d(16),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.ReLU()
+        )
+        self.pool1 = nn.MaxPool2d(2)
         self.layer2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
+            nn.Conv2d(16, 32, kernel_size=(3, 3)),
             nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.ReLU()
+        )
         self.layer3 = nn.Sequential(
-            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(32, 64, kernel_size=(3, 3)),
             nn.BatchNorm2d(64),
             nn.ReLU()
         )
-        self.fc = nn.Linear(7 * 7 * 64, 10)
-        # self.fc = nn.Linear(7 * 7 * 32, 10)
-
+        self.pool2 = nn.MaxPool2d(2)
+        self.fc = nn.Linear(5 * 5 * 64, 10)
+    
     def forward(self, x):
-        out = self.layer1(x)
-        out = self.layer2(out)
-        out = self.layer3(out)
-        out = out.reshape(out.size(0), -1)
+        out = self.pool1(self.layer1(x))
+        out = self.pool2(self.layer3(self.layer2(out)))
+        out = out.view(out.size(0), -1)
         out = self.fc(out)
         return out
 
@@ -118,14 +118,16 @@ def train(model, trainloader, optimizer, epochs):
 
 
 from sklearn.metrics import f1_score, recall_score
-import numpy as np
 
 def test(model, testloader):
     model.to(device)
-    model.eval()
+    # model.eval()
+    model.train()
 
     all_labels = []
     all_predictions = []
+    total_loss = 0.0  # 用于累计 loss
+    criterion = nn.CrossEntropyLoss()
 
     with torch.no_grad():
         correct = 0
@@ -134,6 +136,11 @@ def test(model, testloader):
             images, labels = data
             images, labels = images.to(device), labels.to(device)
             outputs = model(images)
+            
+            # 计算 loss
+            loss = criterion(outputs, labels)
+            total_loss += loss.item() * images.size(0)  # 乘以 batch size 因为 loss 通常是平均值
+            
             predicted = torch.argmax(outputs, dim=1)  # 获取预测结果
 
             # 收集所有标签和预测结果
@@ -144,16 +151,22 @@ def test(model, testloader):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
+    # 计算平均 loss
+    avg_loss = total_loss / total
+    logging.debug('labels:{}, images:{}'.format(labels.size(0),images.size(0)))
+    logging.debug('total_loss:{}, total:{}'.format(total_loss, total))
+    logging.debug('Loss: {:.4f}'.format(avg_loss))
+
     # 计算准确率
     accuracy = correct / total
     logging.debug('Accuracy: {:.2f}%'.format(100 * accuracy))
 
     # 计算召回率（Recall）
-    recall = recall_score(all_labels, all_predictions, average='weighted')  # 根据类型分配权重
+    recall = recall_score(all_labels, all_predictions, average='weighted')
     logging.debug('Recall: {:.2f}%'.format(100 * recall))
 
     # 计算 F-score
-    f_score = f1_score(all_labels, all_predictions, average='weighted')  # 根据类型分配权重
+    f_score = f1_score(all_labels, all_predictions, average='weighted')
     logging.debug('F-score: {:.2f}%'.format(100 * f_score))
 
-    return accuracy, recall, f_score
+    return accuracy, recall, f_score, avg_loss

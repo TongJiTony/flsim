@@ -197,8 +197,9 @@ class Server(object):
             testset = self.loader.get_testset()
             batch_size = self.config.fl.batch_size
             testloader = fl_model.get_testloader(testset, batch_size)
-            accuracy, recall, f_score = fl_model.test(self.model, testloader)
+            accuracy, recall, f_score, avg_loss = fl_model.test(self.model, testloader)
 
+        logging.info('Loss: {:.4f}'.format(avg_loss))
         logging.info('Average accuracy: {:.2f}%'.format(100 * accuracy))
         logging.info('Recall: {:.2f}%'.format(100 * recall))
         logging.info('F-score: {:.2f}%\n'.format(100 * f_score))
