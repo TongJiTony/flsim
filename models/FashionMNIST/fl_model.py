@@ -113,14 +113,19 @@ def train(model, trainloader, optimizer, epochs):
 def test(model, testloader):
     model.to(device)
     model.eval()
+    criterion = nn.CrossEntropyLoss()
 
     with torch.no_grad():
         correct = 0
         total = 0
+        total_loss = 0
         for data in testloader:
             images, labels = data
             images, labels = images.to(device), labels.to(device)
             outputs = model(images)
+            loss = criterion(outputs, labels)
+            total_loss += loss.item() * labels.size(0)
+
             predicted = torch.argmax(  # pylint: disable=no-member
                 outputs, dim=1)
             total += labels.size(0)
@@ -128,5 +133,8 @@ def test(model, testloader):
 
     accuracy = correct / total
     logging.debug('Accuracy: {:.2f}%'.format(100 * accuracy))
+
+    avg_loss = total_loss / total
+    logging.info('loss: {:.4f}'.format(avg_loss))
 
     return accuracy
