@@ -44,7 +44,7 @@ def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
         label = log_file.split('/')[-1]  # 使用文件名作为标签
         ax1.plot(rounds, accuracies, marker='o', linestyle='-', label=label)
         if loss_curve_flag:
-            ax2.plot(rounds, losses, marker='s', linestyle='--', color='r', label=f"Loss - {label}")
+            ax2.plot(rounds, losses, marker='s', linestyle='--', label=f"Loss - {label}")
 
     ax1.set_xlabel("Round Number")
     ax1.set_ylabel("Accuracy (%)", color='b')

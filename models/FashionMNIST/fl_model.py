@@ -102,14 +102,15 @@ def train(model, trainloader, optimizer, epochs):
     criterion = nn.CrossEntropyLoss()
 
     for epoch in range(1, epochs + 1):
+
         for batch_id, data in enumerate(trainloader):
             inputs, labels = data
             inputs, labels = inputs.to(device), labels.to(device)
 
+            optimizer.zero_grad()
             outputs = model(inputs)
             loss = criterion(outputs, labels)
-
-            optimizer.zero_grad()
+ 
             loss.backward()
             optimizer.step()
             if batch_id % log_interval == 0:

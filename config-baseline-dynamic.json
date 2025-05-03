@@ -3,18 +3,18 @@
         "total": 10,
         "per_round": 5,
         "label_distribution": "normal",
-        "injection": false,
+        "injection": true,
         "injection_method": "label_flip"
     },
     "data": {
-        "loading": "static",
+        "loading": "dynamic",
         "partition": {
             "size": 1000
         },
         "IID": true
     },
     "federated_learning": {
-        "rounds": 30,
+        "rounds": 100,
         "target_accuracy": 0.99,
         "task": "train",
         "epochs": 5,
@@ -25,5 +25,5 @@
         "data": "./data",
         "model": "./models"
     },
-    "server": "kcenter"
+    "server": "basic"
 }
