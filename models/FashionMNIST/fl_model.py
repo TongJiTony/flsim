@@ -7,7 +7,7 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 
 # Training settings
-lr = 0.01
+lr = 0.001
 momentum = 0.5
 log_interval = 10
 
@@ -140,7 +140,9 @@ def test(model, testloader):
             
             # 计算 loss
             loss = criterion(outputs, labels)
-            total_loss += loss.item() * images.size(0)  # 乘以 batch size 因为 loss 通常是平均值
+            total_loss += loss.item() * images.size(0)  # 乘以 batch size 因为 loss 
+            # logging.info('outputs:{}, labels:{}'.format(outputs,labels))
+            # logging.info('single loss:{:.4f}'.format(loss.item()))
             
             predicted = torch.argmax(outputs, dim=1)  # 获取预测结果
 
