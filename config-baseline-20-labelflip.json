@@ -1,0 +1,29 @@
+{
+    "clients": {
+        "total": 20,
+        "per_round": 6,
+        "label_distribution": "normal",
+        "injection": true,
+        "injection_method": "label_flip"
+    },
+    "data": {
+        "loading": "static",
+        "partition": {
+            "size": 1500
+        },
+        "IID": true
+    },
+    "federated_learning": {
+        "rounds": 50,
+        "target_accuracy": 0.99,
+        "task": "train",
+        "epochs": 5,
+        "batch_size": 10
+    },
+    "model": "FashionMNIST",
+    "paths": {
+        "data": "./data",
+        "model": "./models"
+    },
+    "server": "basic"
+}

@@ -1,20 +1,20 @@
 {
     "clients": {
-        "total": 10,
-        "per_round": 5,
+        "total": 50,
+        "per_round": 15,
         "label_distribution": "normal",
-        "injection": true,
+        "injection": false,
         "injection_method": "label_flip"
     },
     "data": {
-        "loading": "dynamic",
+        "loading": "static",
         "partition": {
-            "size": 1000
+            "size": 3000
         },
         "IID": true
     },
     "federated_learning": {
-        "rounds": 100,
+        "rounds": 50,
         "target_accuracy": 0.99,
         "task": "train",
         "epochs": 5,
