@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import savgol_filter
 
-def smooth_data(y_values, window_size=5, poly_order=2):
+def smooth_data(y_values, window_size=15, poly_order=3):
     return savgol_filter(y_values, window_size, poly_order)
 
 def compute_confidence_interval(data, confidence=0.95):
