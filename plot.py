@@ -2,6 +2,18 @@ import argparse
 import re
 import matplotlib.pyplot as plt
 
+import numpy as np
+from scipy.signal import savgol_filter
+
+def smooth_data(y_values, window_size=5, poly_order=2):
+    return savgol_filter(y_values, window_size, poly_order)
+
+def compute_confidence_interval(data, confidence=0.95):
+    mean = np.mean(data, axis=0)
+    std_err = np.std(data, axis=0) / np.sqrt(len(data))
+    ci_range = 1.96 * std_err  # 95%置信区间
+    return mean, ci_range
+
 def parse_log(log_file, max_round, loss_curve):
     """ 解析日志文件，提取轮数和准确率 """
     rounds = []
@@ -34,7 +46,7 @@ def parse_log(log_file, max_round, loss_curve):
 
 def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
     """ 绘制多个日志文件的对比图 """
-    plt.figure(figsize=(20, 10))
+    plt.figure(figsize=(15, 10))
     ax1 = plt.gca()  # Primary y-axis for accuracy
     ax2 = ax1.twinx()
 
@@ -42,9 +54,13 @@ def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
         log_file = "logs/" + log_file
         rounds, accuracies, losses = parse_log(log_file, max_round, loss_curve_flag)
         label = log_file.split('/')[-1]  # 使用文件名作为标签
-        ax1.plot(rounds, accuracies, marker='o', linestyle='-', label=label)
+
+        # 应用平滑滤波来绘制平滑曲线
+        smoothed_accuracies = smooth_data(accuracies)
+        ax1.plot(rounds, smoothed_accuracies, linestyle='-', label=label)
         if loss_curve_flag:
-            ax2.plot(rounds, losses, marker='s', linestyle='--', label=f"Loss - {label}")
+            smoothed_losses = smooth_data(losses)
+            ax2.plot(rounds, smoothed_losses, linestyle='--', label=f"Loss - {label}")
 
     ax1.set_xlabel("Round Number")
     ax1.set_ylabel("Accuracy (%)", color='b')
@@ -67,7 +83,7 @@ if __name__ == "__main__":
                         help='List of log file paths to process.')
     parser.add_argument('-o', '--output', type=str, default='accuracy_comparison.png',
                         help='Output image filename.')
-    parser.add_argument('-r', '--rounds', type=int, default=30,
+    parser.add_argument('-r', '--rounds', type=int, default=50,
                         help= 'Maximun rounds')
     parser.add_argument('-l', '--loss', action="store_true",
                         help="draw loss curve")
