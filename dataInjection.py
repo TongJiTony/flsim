@@ -68,9 +68,9 @@ def data_injection(data, percentage, method):
         # label flipping
         if injection_option == "label_flip":
             data[i] = label_flip(sample)
-            logging.info('Pick #{} sample, flipping label {} to label {}'.format(i, label, data[i][1]))
+            logging.debug('Pick #{} sample, flipping label {} to label {}'.format(i, label, data[i][1]))
         elif injection_option == "false_sample":
             data[i] = false_sample(sample)
-            logging.info('Pick #{} sample, creating false sample of label {}'.format(i, label))
+            logging.debug('Pick #{} sample, creating false sample of label {}'.format(i, label))
             
     return data
