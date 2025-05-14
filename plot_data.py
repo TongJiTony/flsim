@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import savgol_filter
 
-def smooth_data(y_values, window_size=15, poly_order=3):
+def smooth_data(y_values, window_size=13, poly_order=3):
     return savgol_filter(y_values, window_size, poly_order)
 
 def read_data(input_file):
@@ -25,12 +25,12 @@ def plot_data(input_files, output_image):
     
     for input_file in input_files:
         rounds, accuracies = read_data(input_file)
-        smoothed_accuracies = smooth_data(np.array(accuracies))
-        plt.plot(rounds, smoothed_accuracies, linestyle='-', label=input_file)  # 直接使用文件名作为标签
+        accuracies = smooth_data(np.array(accuracies))
+        plt.plot(rounds, accuracies, linestyle='-', label=input_file.split('.')[0])  # 直接使用文件名作为标签
 
     plt.xlabel("Round Number")
     plt.ylabel("Accuracy (%)")
-    plt.title("Accuracy Trend Comparison")
+    plt.title("Average Accuracy Trend Comparison")
     plt.legend()
     plt.grid(True)
 

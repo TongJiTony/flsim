@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import savgol_filter
 
-def smooth_data(y_values, window_size=15, poly_order=3):
+def smooth_data(y_values, window_size=7, poly_order=2):
     return savgol_filter(y_values, window_size, poly_order)
 
 def compute_confidence_interval(data, confidence=0.95):
@@ -48,7 +48,9 @@ def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
     """ 绘制多个日志文件的对比图 """
     plt.figure(figsize=(15, 10))
     ax1 = plt.gca()  # Primary y-axis for accuracy
-    ax2 = ax1.twinx()
+    
+    if loss_curve_flag:
+        ax2 = ax1.twinx()
 
     for log_file in log_files:
         log_file = "logs/" + log_file
@@ -67,9 +69,12 @@ def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
     ax1.tick_params(axis='y', labelcolor='b')
     ax1.set_title("Accuracy & Loss Trend Comparison Across Logs")
     ax1.legend(loc = "upper right", prop = {'size': 14})
-    ax2.set_ylabel("Loss", color='r')
-    ax2.tick_params(axis='y', labelcolor='r')
-    ax2.legend(loc = "upper left", prop = {'size': 14})
+    
+    if loss_curve_flag:
+        ax2.set_ylabel("Loss", color='r')
+        ax2.tick_params(axis='y', labelcolor='r')
+        ax2.legend(loc = "upper left", prop = {'size': 14})
+    
     plt.grid(True)
 
     # 保存图像
