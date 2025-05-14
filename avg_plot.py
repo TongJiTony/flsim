@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import savgol_filter
 
-def smooth_data(y_values, window_size=23, poly_order=3):
+def smooth_data(y_values, window_size=13, poly_order=3):
     return savgol_filter(y_values, window_size, poly_order)
 
 def parse_log(log_file, max_round, loss_curve):
@@ -68,15 +68,15 @@ def plot_comparison(log_files_set1, log_files_set2, output_image, max_round, los
     smoothed_avg_accuracies1 = smooth_data(avg_accuracies1)
     smoothed_avg_accuracies2 = smooth_data(avg_accuracies2)
 
-    ax1.plot(rounds1, smoothed_avg_accuracies1, linestyle='-', color='blue', label="Average Accuracy - Set 1")
-    ax1.plot(rounds2, smoothed_avg_accuracies2, linestyle='-', color='green', label="Average Accuracy - Set 2")
+    ax1.plot(rounds1, smoothed_avg_accuracies1, linestyle='-', color='blue', label="Average Accuracy - {}".format(log_files_set1[0]))
+    ax1.plot(rounds2, smoothed_avg_accuracies2, linestyle='-', color='green', label="Average Accuracy - {}".format(log_files_set2[0]))
 
     if loss_curve_flag:
         smoothed_avg_losses1 = smooth_data(avg_losses1)
         smoothed_avg_losses2 = smooth_data(avg_losses2)
 
-        ax2.plot(rounds1, smoothed_avg_losses1, linestyle='--', color='red', label="Average Loss - Set 1")
-        ax2.plot(rounds2, smoothed_avg_losses2, linestyle='--', color='orange', label="Average Loss - Set 2")
+        ax2.plot(rounds1, smoothed_avg_losses1, linestyle='--', color='red', label="Average Loss - {}".format(log_files_set1[0]))
+        ax2.plot(rounds2, smoothed_avg_losses2, linestyle='--', color='orange', label="Average Loss - {}".format(log_files_set2[0]))
 
     ax1.set_xlabel("Round Number")
     ax1.set_ylabel("Accuracy (%)", color='b')

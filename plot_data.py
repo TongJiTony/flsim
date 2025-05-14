@@ -19,7 +19,7 @@ def read_data(input_file):
 
     return rounds, accuracies
 
-def plot_data(input_files, output_image):
+def plot_data(input_files, output_image, loss_flag):
     """ 绘制多个数据文件的曲线 """
     plt.figure(figsize=(12, 6))
     
@@ -29,8 +29,12 @@ def plot_data(input_files, output_image):
         plt.plot(rounds, accuracies, linestyle='-', label=input_file.split('.')[0])  # 直接使用文件名作为标签
 
     plt.xlabel("Round Number")
-    plt.ylabel("Accuracy (%)")
-    plt.title("Average Accuracy Trend Comparison")
+    if loss_flag:
+        plt.ylabel("Loss")
+        plt.title("Average Loss Trend Comparison")
+    else:
+        plt.ylabel("Accuracy (%)")
+        plt.title("Average Accuracy Trend Comparison")
     plt.legend()
     plt.grid(True)
 
@@ -38,9 +42,10 @@ def plot_data(input_files, output_image):
     plt.show()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Plot accuracy trend from multiple processed data files.")
+    parser = argparse.ArgumentParser(description="Plot accuracy/loss trend from multiple processed data files.")
     parser.add_argument('-i', '--input', type=str, nargs='+', required=True, help='List of input data files.')
     parser.add_argument('-o', '--output', type=str, default='accuracy_plot.png', help='Output image filename.')
+    parser.add_argument('-l',  '--loss', action='store_true', help="compute loss instead of accuracy")
 
     args = parser.parse_args()
-    plot_data(args.input, args.output)
+    plot_data(args.input, args.output, args.loss)

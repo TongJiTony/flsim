@@ -58,9 +58,9 @@ class Client(object):
         # choose client 1 as the malicious client
         if injection:
             target_client_id = 1
-            percentage = 0.2
+            percentage = 0.5
             if self.client_id == target_client_id: 
-                logging.info('Choose client #{} to attack, flipping {} of all labels'.format(self.client_id, percentage))
+                logging.info('Choose client #{} to attack, injection_percentage is {}, {} method'.format(self.client_id, percentage, injection_method))
                 data = data_injection(data, percentage, injection_method)
         
         # Set data to trainset

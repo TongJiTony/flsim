@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import savgol_filter
 
-def smooth_data(y_values, window_size=7, poly_order=2):
+def smooth_data(y_values, window_size=7, poly_order=3):
     return savgol_filter(y_values, window_size, poly_order)
 
 def compute_confidence_interval(data, confidence=0.95):
@@ -58,8 +58,8 @@ def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
         label = log_file.split('/')[-1]  # 使用文件名作为标签
 
         # 应用平滑滤波来绘制平滑曲线
-        smoothed_accuracies = smooth_data(accuracies)
-        ax1.plot(rounds, smoothed_accuracies, linestyle='-', label=label)
+        accuracies = smooth_data(accuracies)
+        ax1.plot(rounds, accuracies, linestyle='-', label=label)
         if loss_curve_flag:
             smoothed_losses = smooth_data(losses)
             ax2.plot(rounds, smoothed_losses, linestyle='--', label=f"Loss - {label}")
