@@ -65,14 +65,14 @@ def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
             ax2.plot(rounds, smoothed_losses, linewidth=4, linestyle='--', label=f"Loss - {label}")
 
     ax1.set_xlabel("Round Number", size=18)
-    ax1.set_ylabel("Accuracy (%)", color='b', size=18)
-    ax1.tick_params(axis='y', labelcolor='b', size=14)
+    ax1.set_ylabel("Accuracy (%)", size=18)
+    ax1.tick_params(axis='x', labelsize=16)
+    ax1.tick_params(axis='y', labelsize=16)
     ax1.legend(loc = "lower right", prop = {'size': 18})
     
     if loss_curve_flag:
-        ax2.set_ylabel("Loss", color='r', size=18)
-        ax2.tick_params(axis='y', labelcolor='r')
-        ax2.yticks(np.arange(0, 2, 0.2), size=14)
+        ax2.set_ylabel("Loss", size=18)
+        ax2.tick_params(axis='y',labelsize=16)
         ax2.legend(loc = "upper right", prop = {'size': 18})
     
     plt.grid(True)
