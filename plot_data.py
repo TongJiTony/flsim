@@ -26,16 +26,17 @@ def plot_data(input_files, output_image, loss_flag):
     for input_file in input_files:
         rounds, accuracies = read_data(input_file)
         accuracies = smooth_data(np.array(accuracies))
-        plt.plot(rounds, accuracies, linestyle='-', label=input_file.split('.')[0])  # 直接使用文件名作为标签
+        plt.plot(rounds, accuracies, linewidth=4, linestyle='-', label=input_file.split('.')[0])  # 直接使用文件名作为标签
 
-    plt.xlabel("Round Number")
+    plt.xlabel("Round Number", fontsize=18)
+    plt.xticks(fontsize=14)
     if loss_flag:
-        plt.ylabel("Loss")
-        plt.title("Average Loss Trend Comparison")
+        plt.ylabel("Loss", fontsize=18)
+        plt.yticks(np.arange(0, 2, 0.2), fontsize=14)
+        plt.legend(loc = "upper right", prop = {'size': 18})
     else:
-        plt.ylabel("Accuracy (%)")
-        plt.title("Average Accuracy Trend Comparison")
-    plt.legend()
+        plt.ylabel("Accuracy(%)", fontsize=18)
+        plt.legend(loc = "lower right", prop = {'size': 18})
     plt.grid(True)
 
     plt.savefig("charts/" + output_image)

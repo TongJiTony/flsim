@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import savgol_filter
 
-def smooth_data(y_values, window_size=7, poly_order=3):
+def smooth_data(y_values, window_size=13, poly_order=3):
     return savgol_filter(y_values, window_size, poly_order)
 
 def compute_confidence_interval(data, confidence=0.95):
@@ -46,7 +46,7 @@ def parse_log(log_file, max_round, loss_curve):
 
 def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
     """ 绘制多个日志文件的对比图 """
-    plt.figure(figsize=(15, 10))
+    plt.figure(figsize=(12, 6))
     ax1 = plt.gca()  # Primary y-axis for accuracy
     
     if loss_curve_flag:
@@ -59,21 +59,21 @@ def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
 
         # 应用平滑滤波来绘制平滑曲线
         accuracies = smooth_data(accuracies)
-        ax1.plot(rounds, accuracies, linestyle='-', label=label)
+        ax1.plot(rounds, accuracies, linewidth=4, linestyle='-', label=label)
         if loss_curve_flag:
             smoothed_losses = smooth_data(losses)
-            ax2.plot(rounds, smoothed_losses, linestyle='--', label=f"Loss - {label}")
+            ax2.plot(rounds, smoothed_losses, linewidth=4, linestyle='--', label=f"Loss - {label}")
 
-    ax1.set_xlabel("Round Number")
-    ax1.set_ylabel("Accuracy (%)", color='b')
-    ax1.tick_params(axis='y', labelcolor='b')
-    ax1.set_title("Accuracy & Loss Trend Comparison Across Logs")
-    ax1.legend(loc = "upper right", prop = {'size': 14})
+    ax1.set_xlabel("Round Number", size=18)
+    ax1.set_ylabel("Accuracy (%)", color='b', size=18)
+    ax1.tick_params(axis='y', labelcolor='b', size=14)
+    ax1.legend(loc = "lower right", prop = {'size': 18})
     
     if loss_curve_flag:
-        ax2.set_ylabel("Loss", color='r')
+        ax2.set_ylabel("Loss", color='r', size=18)
         ax2.tick_params(axis='y', labelcolor='r')
-        ax2.legend(loc = "upper left", prop = {'size': 14})
+        ax2.yticks(np.arange(0, 2, 0.2), size=14)
+        ax2.legend(loc = "upper right", prop = {'size': 18})
     
     plt.grid(True)
 

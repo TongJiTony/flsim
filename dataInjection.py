@@ -43,8 +43,8 @@ def false_sample(sample, mean=0, std=0.1):
 
     参数:
     sample (tuple): (image tensor, label)
-    mean (float): 高斯噪声的均值
-    std (float): 高斯噪声的标准差
+    mean (float): 高斯噪声的均值，整体偏移图片亮度
+    std (float): 高斯噪声的标准差，影响图片噪声强度
 
     返回:
     tuple: (加噪后的image tensor, 原label)
