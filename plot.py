@@ -58,8 +58,8 @@ def plot_accuracy(log_files, output_image, max_round, loss_curve_flag):
         label = log_file.split('/')[-1]  # 使用文件名作为标签
 
         # 应用平滑滤波来绘制平滑曲线
-        accuracies = smooth_data(accuracies)
-        ax1.plot(rounds, accuracies, linewidth=4, linestyle='-', label=label)
+        # accuracies = smooth_data(accuracies)
+        ax1.plot(rounds, accuracies, linewidth=4, marker='*', markersize=10, linestyle='-', label=label)
         if loss_curve_flag:
             smoothed_losses = smooth_data(losses)
             ax2.plot(rounds, smoothed_losses, linewidth=4, linestyle='--', label=f"Loss - {label}")
